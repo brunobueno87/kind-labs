@@ -14,7 +14,9 @@ Documentar aprendizados de forma simples e prática
 A maioria dos labs deste repositório assume que você possui:
 
 ✅ Docker
+
 ✅ kubectl
+
 ✅ kind (Kubernetes in Docker)
 
 
