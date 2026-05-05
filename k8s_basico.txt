@@ -1,0 +1,78 @@
+🚀 Subindo um Cluster Kubernetes “Limpo” com Kind
+Este guia mostra, de forma simples e prática, como subir um cluster Kubernetes local utilizando Kind (Kubernetes IN Docker).
+Ao final, você terá um cluster funcional e validado com um deploy de NGINX.
+
+📌 Pré-requisitos
+Antes de começar, certifique-se de ter instalado na sua máquina:
+
+✅ Docker
+✅ kubectl (CLI do Kubernetes)
+
+
+💡 O Kind utiliza containers Docker para simular os nós do cluster.
+
+📥 Passo 1 — Instalando o Kind
+Baixe o binário do Kind:
+
+curl -Lo kind https://kind.sigs.k8s.io/dl/latest/kind-linux-amd64
+
+Ajuste as permissões e mova o binário para um diretório disponível no PATH:
+
+chmod +x kind
+sudo mv kind /usr/local/bin/
+
+
+Verifique se a instalação foi concluída com sucesso:
+
+kind version
+
+⚙️ Passo 2 — Criando o Cluster Kubernetes
+Agora vamos subir o cluster:
+
+kind create cluster
+
+
+Esse comando cria um cluster Kubernetes local completamente funcional, utilizando containers Docker.
+
+Para validar se o cluster está acessível, liste os namespaces:
+
+kubectl get ns
+
+
+Se retornar algo como default, kube-system, kube-public, tudo está certo ✅
+
+🧪 Passo 3 — Validando o Cluster com NGINX
+Vamos criar um deployment simples de NGINX para testar o funcionamento do cluster:
+
+kubectl create deployment nginx --image=nginx
+
+Agora exponha o deployment criando um Service do tipo NodePort:
+
+kubectl expose deployment nginx --type=NodePort --port=80
+
+Confirme se o pod e o service estão rodando:
+
+kubectl get pods
+kubectl get svc
+
+🌐 Passo 4 — Acessando o Service Localmente
+Para acessar o NGINX a partir da sua máquina (host), utilize o port-forward:
+
+kubectl port-forward svc/nginx 8080:80
+
+Agora basta acessar no navegador:
+
+👉 http://localhost:8080
+
+Se aparecer a página padrão do NGINX, seu cluster está funcionando perfeitamente 🎉
+
+✅ Conclusão
+Pronto!
+A partir daqui, você já tem:
+
+✅ Um cluster Kubernetes local
+✅ Comunicação funcionando via kubectl
+✅ Um deploy e service validados
+Agora é só seguir com o que desejar subir no seu cluster — aplicações, manifests, Helm, testes, estudos ou POCs.
+
+
