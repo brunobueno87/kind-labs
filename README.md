@@ -23,24 +23,7 @@ A maioria dos labs deste repositório assume que você possui:
 
 📁 Estrutura do Repositório
 A estrutura segue o modelo tecnologia → subcomponentes → passo a passo.
-kubernetes-labs/
-├── kind/
-│   └── k8s_basico/
-│       └── README.md
-│
-├── argo/
-│   ├── argo-cd/
-│   │   └── README.md
-│   ├── argo-workflows/
-│   │   └── README.md
-│   ├── argo-rollouts/
-│   │   └── README.md
-│   └── argo-events/
-│       └── README.md
-├── helm/
-│   └── README.md
-│
-└── README.md
+(Ajustar esse ponto)
 
 
 🔀 Organização dos Labs
