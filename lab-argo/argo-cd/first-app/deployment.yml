@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: highway-animation
+  namespace: highway-animation
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: highway-animation
+  template:
+    metadata:
+      labels:
+        app: highway-animation
+    spec:
+      containers:
+      - name: highway-animation
+        image: siddharth67/highway-animation:green
+        ports:
+        - containerPort: 3000
+        env:
+        - name: POD_COUNT
+          value: "1"
