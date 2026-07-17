@@ -1,0 +1,14 @@
+# db-migration-job.yaml
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: db-migration-job
+spec:
+  template:
+    spec:
+      containers:
+      - name: db-migration
+        image: alpine:3.12
+        command: ["/bin/sh", "-c", "echo 'Running Database Migration...' && sleep 15 && echo 'Database Migration Complete.'"]
+      restartPolicy: Never
+  backoffLimit: 2

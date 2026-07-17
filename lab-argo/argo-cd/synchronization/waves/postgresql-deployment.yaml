@@ -1,0 +1,20 @@
+# postgresql-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgresql
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgresql
+  template:
+    metadata:
+      labels:
+        app: postgresql
+    spec:
+      containers:
+      - name: postgresql
+        image: nginx:alpine
+        ports:
+        - containerPort: 80

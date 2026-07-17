@@ -1,0 +1,9 @@
+# configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+data:
+  config.properties: |
+    database.url=postgresql-service:5432
+    cache.url=redis-service:6379

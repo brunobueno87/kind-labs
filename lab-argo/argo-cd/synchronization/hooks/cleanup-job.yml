@@ -1,0 +1,14 @@
+# cleanup-job.yaml
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: cleanup-job
+spec:
+  template:
+    spec:
+      containers:
+      - name: cleanup
+        image: alpine:3.12
+        command: ["/bin/sh", "-c", "echo 'Running Cleanup Job...' && sleep 10 && echo 'Cleanup Complete.'"]
+      restartPolicy: Never
+  backoffLimit: 2
