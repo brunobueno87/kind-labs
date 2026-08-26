@@ -1,0 +1,24 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: common-nginx-server
+  namespace: argocd
+spec:
+  generators:
+    - clusters: {}
+  template:
+    metadata:
+      name: '{{name}}-nginx-server'
+    spec:
+      project: default
+      source:
+        repoURL: http://github.com/brunobueno87/kind-labs
+        targetRevision: HEAD
+        path: ./argo-cd/nginx-app
+      destination:
+        server: '{{server}}'
+        namespace: nginx-server
+      syncPolicy:
+        automated: {}
+        syncOptions:
+          - CreateNamespace=true

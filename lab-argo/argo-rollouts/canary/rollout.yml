@@ -1,0 +1,33 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: app-rollout
+  namespace: canary
+spec:
+  replicas: 10
+  selector:
+    matchLabels:
+      app: app-rollout
+  template:
+    metadata:
+      labels:
+        app: app-rollout
+    spec:
+      containers:
+        - name: app
+          image: siddharth67/app:v1
+  strategy:
+    canary:
+      steps:
+        - setWeight: 20
+        - pause:
+            duration: 1m
+        - setWeight: 40
+        - pause:
+            duration: 1m
+        - setWeight: 60
+        - pause:
+            duration: 1m
+        - setWeight: 80
+        - pause:
+            duration: 1m

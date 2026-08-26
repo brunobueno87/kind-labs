@@ -1,0 +1,30 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: highway-bluegreen
+  namespace: blue-green
+spec:
+  replicas: 10
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      app: highway-bluegreen
+  template:
+    metadata:
+      labels:
+        app: highway-bluegreen
+    spec:
+      containers:
+      - name: highway-bluegreen
+        image: siddharth67/highway-animation:blue
+        ports:
+        - containerPort: 3000
+        env:
+        - name: POD_COUNT
+          value: "10" 
+  strategy:
+    blueGreen: 
+      activeService: highway-bluegreen-active
+      previewService: highway-bluegreen-preview
+      autoPromotionEnabled: false
+
