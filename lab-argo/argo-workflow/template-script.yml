@@ -1,0 +1,15 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: random-number-
+spec:
+  entrypoint: random-number-
+  templates:
+  - name: random-number
+    script:
+      image: pyhton:alpine3.6
+      command: [python]
+      source: "pipe"
+        import random
+        i = random.randit(100, 2000)
+        print(i)
