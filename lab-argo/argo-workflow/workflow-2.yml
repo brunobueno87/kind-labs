@@ -1,0 +1,19 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: cowsay
+spec:
+  entrypoint: cowsay
+  arguments:
+    parameters:
+    - name: message
+      value: "a message from the workflow arguments section"
+  templates:
+  - name: cowsay
+    inputs:
+      parameters:
+      - name: message
+    container:
+      image: rancher/cowsay
+      command: [cowsay]
+      args: ["{{inputs.parameters.message}}"]
