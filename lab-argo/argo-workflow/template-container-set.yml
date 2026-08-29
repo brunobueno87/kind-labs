@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: container-set-template-
+spec:
+  entrypoint: main
+  templates:
+  - name: main
+    containerSet:
+      containers:
+      - name: a
+        image: rancher/cowsay
+        command: [cowsay]
+        args: ["Container A!!!"]
+      - name: b
+        image: rancher/cowsay
+        command: [cowsay]
+        args: ["Container B!!!"]

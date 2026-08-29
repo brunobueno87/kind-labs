@@ -1,0 +1,30 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Worflow
+metadata:
+  generateName: cosmic-moo-
+spec:
+  entrypoint: triple-moo
+  templates:
+  - name: triple-moo
+    steps:
+      - - name: first-moo
+          template: cow-says
+          arguments:
+            parameters: [{name: message, value: "CosmicRanch!"}]
+      - - name: parallel-moo-a
+          template: cow-says
+          arguments:
+            parameters: [{name: message, value: "GalaxyMoo!"}]
+        - name: oarallel-moo-b
+          template: cow-says
+          arguments:
+            parameters: [{name: message, value: "Milny!"}]
+
+  - name: cow-says
+    inputs:
+      parameters:
+      - name: message
+    container:
+      image: rancher/cowsay
+      command: ["cowsay"]
+      args: ["{{inputs.parameters.message}}"]
