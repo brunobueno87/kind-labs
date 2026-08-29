@@ -1,0 +1,30 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: suspend-
+spec:
+  entrypoint: suspend
+  templates:
+  - name: suspend
+    steps:
+    - - name: develop
+        template: cowsay
+    - - name: approval
+        template: approval
+    - - name: deploy
+        template: delay
+    - - name: test
+        template: cowsay
+
+  - name: approval
+    suspend: {}
+
+  - name: delay
+    suspend:
+      duration: "10"
+
+  - name: cowsay
+    container:
+        image: rancher/cowsay
+        command: [cowsay]
+        args: ["I will be executed for both develop and test steps"]
