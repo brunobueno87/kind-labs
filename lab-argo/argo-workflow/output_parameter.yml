@@ -1,0 +1,32 @@
+apiVersion: argoproj.io/v1alpha1
+kind: workflow
+metadata:
+  generateName: simple-output-example-
+spec:
+  entrypoint: main
+  templates:
+    - name: main
+      steps:
+        - - name: generate
+            template: producer
+        - - name: consumer
+            template: consumer
+            arguments:
+              parameters:
+                - name: message
+                  value: "{{steps.generate.outputs.result}}"
+                    
+    - name: producer
+      script:
+        image: busybox:1.28
+        command: [sh, -c]
+        source: echo "hello from the producer step"
+
+    - name: consumer
+      inputs:
+        parameters:
+          - name: message
+      container:
+        image: busybox:1.28
+        command: [sh, -c]
+        args: ["echo Received: '{{inputs.parameters.message}}'"]
