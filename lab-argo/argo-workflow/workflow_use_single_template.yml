@@ -1,0 +1,17 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: use-single-template-
+spec:
+  entrypoint: my-custom-workflow
+  templates:
+  - name: my-custom-workflow
+    steps:
+    - - name: first-step
+        templateRef:
+          name: cowsay-template
+          template: cowsay
+        arguments:
+          parameters:
+          - name: message
+            value: "I called this from another workflow!"

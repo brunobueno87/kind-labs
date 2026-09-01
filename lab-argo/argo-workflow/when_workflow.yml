@@ -1,0 +1,36 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: when-condition-
+  namespace: argo
+spec:
+  entrypoint: main
+  arguments:
+    parameters:
+    - name: environment
+      value: "production"
+  templates:
+  - name: main
+    steps:
+    - - name: build
+        template: build-step
+      - name: test
+        template: test-step
+        when: "{{workflow.parameters.environment}} != production"
+      - name: deploy
+        template: deploy-step
+  - name: build-step
+    container:
+      image: alpine
+      command: [sh, -c]
+      args: ["echo 'Building application....'"]
+  - name: test-step
+    container:
+      image: alpine
+      command: [sh, -c]
+      args: ["echo 'Running tests...'"]
+  - name: deploy-step
+    container:
+      image: alpine
+      command: [sh, -c]
+      args: ["echo 'Deploying to {{workflow.parameters.environment}}'"]

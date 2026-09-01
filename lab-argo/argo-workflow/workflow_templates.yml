@@ -1,0 +1,16 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: cowsay-template
+  namespace: argo
+spec:
+  entrypoint: cowsay
+  templates:
+  - name: cowsay
+    inputs:
+      parameters:
+      - name: message
+    container:
+      image: rancher/cowsay
+      command: [cowsay]
+      args: ["{{inputs.parameters.message}}"]
