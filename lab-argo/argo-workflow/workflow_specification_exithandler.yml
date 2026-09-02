@@ -1,0 +1,29 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  name: exit-handler-workflow
+  namespace: argo
+spec:
+  entrypoint: main
+  onExit: cleanup
+  templates:
+  - name: main
+    steps:
+    - - name: work
+        template: do-work
+  - name: do-work
+    container:
+      image: alpine
+      command: [sh, -c]
+      args: ["echo 'Doing work...'; exit 1"]
+  - name: cleanup
+    container:
+      image: alpine
+      command: [sh, -c]
+      args:
+      - |
+        echo "Workflow status: {{workflow.status}}"
+        echo "Cleaning up resources...."
+        if [ "{{workflow.status}}" = "failed" ]; then
+           echo "Sending failure notification"
+        fi

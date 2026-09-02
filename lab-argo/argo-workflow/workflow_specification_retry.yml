@@ -1,0 +1,35 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  name: retry-workflow
+  namespace: argo
+spec:
+  entrypoint: main
+  templates:
+  - name: main
+    steps:
+    - - name: flask-task
+        template: unstable-step
+  - name: unstable-step
+    retryStrategy:
+      limiti: 3
+      retryPolicy: "Always"
+      backoff:
+        duration: "5s"
+        factor: 2
+        maxDuration: "1m"
+    container:
+      image: alpine
+      command: [sh, -c]
+      args:
+      - |
+        echo "Attempt {{retries}}"
+        RANDOM_NUM=$((RANDOM %3))
+
+        if [ $RANDOM_NUM -eq 0 ]; then
+          echo "Success!"
+          exit 0
+        else
+          echo "Failed, will retry..."
+          exit 1
+        fi

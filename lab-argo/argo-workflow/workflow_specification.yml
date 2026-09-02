@@ -1,0 +1,30 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  name: daemon-workflow
+  namespace: argo
+spec:
+  entrypoint: main
+  templates:
+  - name: main
+    steps:
+    - - name: start-database
+        template: mock-database
+      - name: run-tests
+        template: test-step
+
+  - name: mock-database
+    daemon: true
+    container:
+      image: redis:alpine
+      command: [redis-server]
+      readinessProbe:
+        tcpSocket:
+          port: 6379
+        initialDelaySeconds: 5
+        periodSeconds: 5
+  - name: test-step
+    container:
+      image: alpine
+      command: [sh, -c]
+      args: ["echo 'Testing against database.....' ; sleep 300"]

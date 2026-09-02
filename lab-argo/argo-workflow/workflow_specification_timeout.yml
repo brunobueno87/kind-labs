@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  name: timeout-workflow
+  namespace: argo
+spec:
+  entrypoint: main
+  activeDeadlineSeconds: 600
+  templates:
+  - name: main
+    steps:
+    - - name: quick-task
+        template: fast-step
+      - name: slow-step
+        template: slow-step
+  - name: fast-step
+    activeDeadlineSeconds: 100
+    container:
+      image: alpine
+      command: [sh, -c]
+      args: ["echo 'Quick task' ; sleep 2"]
+  - name: slow-step
+    activeDeadlineSeconds: 5
+    container:
+      image: alpine
+      command: [sh, -c]
+      args: ["echo 'Starting slow task...' ; sleep 30"]

@@ -1,0 +1,38 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: artifact-
+  namespace: argo
+spec:
+  entrypoint: main
+  templates:
+  - name: main
+    steps:
+      - - name: generate
+          template: generate-file
+      - - name: consume
+          template: consume-file
+          arguments:
+            artifacts:
+              - name: message-from-producer
+                from: "{{steps.generate.outputs.artifacts.my-generated-artifact}}"
+
+  - name: generate-file
+    script:
+      image: busybox
+      command: [sh, -c]
+      source: "echo 'Hello from an artifacts!' > /tmp/hello.txt"
+    outputs:
+      artifacts:
+        - name: my-generated-artifact
+          path: /tmp/hello.txt
+
+  - name: consume-file
+    inputs:
+      artifacts:
+        - name: message-from-producer
+          path: /tmp/message.txt
+    container:
+      image: busybox
+      command: [sh, -c]
+      args: ["echo '...'; echo 'Consumer received;'; cat /tmp/message.txt; echo '...'"]
