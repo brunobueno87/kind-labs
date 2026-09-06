@@ -1,0 +1,46 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: highway-animation-rollout
+  namespace: beta
+spec:
+  replicas: 4
+  workloadRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: highway-animation-1
+    scaleDown: onsuccess
+  strategy:
+    blueGreen:
+      activeService: highway-bluegreen-active
+      previewService: highway-bluegreen-preview
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: highway-bluegreen-active
+  namespace: beta
+spec:
+  selector:
+    app: highway-animation-1
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 3000
+  type: NodePort
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: highway-blugreen-preview
+  namespace: beta
+spec:
+  selector:
+    app: highway-animation-1
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 3000
+  type: NodePort

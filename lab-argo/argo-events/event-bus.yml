@@ -1,0 +1,10 @@
+apiVersion: argoproj.io/v1alpha1
+kind: EventBus
+metadata:
+  name: default
+  namespace: argo-events
+spec:
+  nats:
+    native:
+      # Isso vai criar um cluster NATS simples com 3 réplicas no seu Kind
+      replicas: 3
